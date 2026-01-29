@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pastebin Lite — Aganitha Take-Home Assignment
 
-## Getting Started
+This is a small Pastebin-like web application where users can create a text paste, generate a shareable link, and view the paste content using that link.
 
-First, run the development server:
+The project is built with **Next.js App Router** and uses **Upstash Redis** for persistence so that data survives across requests in a serverless deployment environment (Vercel).
+
+---
+
+## ✅ Features Implemented
+
+- Health check endpoint: `GET /api/healthz`
+- Create a paste: `POST /api/pastes`
+- Fetch a paste via API: `GET /api/pastes/:id`
+- View paste in browser: `GET /p/:id`
+- Persistent storage using Redis (Upstash)
+- Safe rendering of paste content in HTML
+
+---
+
+## ✅ Technology Stack
+
+- **Next.js 16 (App Router)**
+- **TypeScript**
+- **Upstash Redis** (Persistence Layer)
+- **Vercel** (Deployment)
+
+---
+
+## ✅ Persistence Layer
+
+This application uses **Upstash Redis** as the persistence layer.
+
+Reason for choosing Redis (Upstash):
+
+- Works well with Vercel serverless functions
+- Data persists across requests (unlike in-memory storage)
+- Simple key-value store suitable for paste content
+
+Each paste is stored with a Redis key of the form:
+
+---
+
+## ✅ Running Locally
+
+### 1. Clone the Repository
 
 ```bash
+git clone https://github.com/Spandana-5/pastebin-lite.git
+cd pastebin-lite
+
+2. Install Dependencies
+npm install
+3. Setup Environment Variables
+
+Create a .env.local file in the root:
+
+UPSTASH_REDIS_REST_URL=your_upstash_url
+UPSTASH_REDIS_REST_TOKEN=your_upstash_token
+BASE_URL=http://localhost:3000
+4. Start the Development Server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will run at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+✅ API Routes
+Health Check
+GET /api/healthz
+Response: { "ok": true }
 
-## Learn More
+Create Paste
+POST /api/pastes
+Body:
+{
+  "content": "Hello World"
+}
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Response:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+{
+  "id": "abcd1234",
+  "url": "https://your-domain.vercel.app/p/abcd1234"
+}
 
-## Deploy on Vercel
+Fetch Paste
+GET /api/pastes/:id
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Returns the stored paste content as JSON.
+
+View Paste in Browser
+GET /p/:id
+
+
+Returns HTML displaying the paste safely.
+
+✅ Deployment
+
+The project is deployed on Vercel.
+
+Live URL:
+
+https://pastebin-lite-rust-theta.vercel.app
+
+
+
